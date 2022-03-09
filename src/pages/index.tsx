@@ -1,3 +1,4 @@
+import {Heading} from '@chakra-ui/react'
 import type {NextPage} from 'next'
 import Head from 'next/head'
 
@@ -11,7 +12,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <h1>Coordinape Playground</h1>
+        <Heading as="h1">Coordinape Playground</Heading>
       </main>
     </div>
   )
