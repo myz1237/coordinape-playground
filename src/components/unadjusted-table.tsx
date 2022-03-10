@@ -1,6 +1,6 @@
 import {Table, Tbody, Td, Tfoot, Th, Thead, Tr} from '@chakra-ui/react'
-import {CircleSnapshot, User} from '../types'
-import {giveReceived} from '../utils'
+import {CircleSnapshot} from '../types'
+import {decimalToPercent, giveReceived} from '../utils'
 
 export interface UnadjustedTableProps extends CircleSnapshot {}
 
@@ -15,6 +15,7 @@ export const UnadjustedTable = ({users, totalGive}: UnadjustedTableProps) => {
         <Tr>
           <Th>Name</Th>
           <Th isNumeric>GIVE Received</Th>
+          <Th isNumeric>% of GIVE</Th>
         </Tr>
       </Thead>
       <Tbody>
@@ -23,11 +24,13 @@ export const UnadjustedTable = ({users, totalGive}: UnadjustedTableProps) => {
             (acc, gift) => acc + gift.tokens,
             0,
           )
+          const percentGive = decimalToPercent(giveReceived / totalGive)
 
           return (
             <Tr key={user.address}>
               <Td>{user.name}</Td>
               <Td isNumeric>{giveReceived}</Td>
+              <Td isNumeric>{percentGive}</Td>
             </Tr>
           )
         })}
@@ -35,6 +38,7 @@ export const UnadjustedTable = ({users, totalGive}: UnadjustedTableProps) => {
       <Tfoot>
         <Tr>
           <Td>Total</Td>
+          <Td />
           <Td isNumeric>{totalGive}</Td>
         </Tr>
       </Tfoot>

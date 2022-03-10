@@ -1,6 +1,6 @@
 import {Table, Tbody, Td, Tfoot, Th, Thead, Tr} from '@chakra-ui/react'
 import {CircleSnapshot} from '../types'
-import {giveReceived} from '../utils'
+import {decimalToPercent, giveReceived} from '../utils'
 
 export type CappedTableProps = Pick<CircleSnapshot, 'users'>
 
@@ -26,6 +26,7 @@ export const CappedTable = ({users}: CappedTableProps) => {
         <Tr>
           <Th>Name</Th>
           <Th isNumeric>GIVE Received</Th>
+          <Th isNumeric>% of GIVE</Th>
         </Tr>
       </Thead>
       <Tbody>
@@ -34,11 +35,13 @@ export const CappedTable = ({users}: CappedTableProps) => {
             (acc, gift) => acc + gift.tokens,
             0,
           )
+          const percentGive = decimalToPercent(giveReceived / totalGive)
 
           return (
             <Tr key={user.address}>
               <Td>{user.name}</Td>
               <Td isNumeric>{giveReceived}</Td>
+              <Td isNumeric>{percentGive}</Td>
             </Tr>
           )
         })}
@@ -46,6 +49,7 @@ export const CappedTable = ({users}: CappedTableProps) => {
       <Tfoot>
         <Tr>
           <Td>Total</Td>
+          <Td />
           <Td isNumeric>{totalGive}</Td>
         </Tr>
       </Tfoot>
