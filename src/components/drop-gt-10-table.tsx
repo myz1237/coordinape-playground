@@ -7,16 +7,13 @@ import {
   numberFormatter,
 } from '../utils'
 
-export type CappedTableProps = Pick<CircleSnapshot, 'users'>
+export type DropGt10TableProps = Pick<CircleSnapshot, 'users'>
 
-export const CappedTable = ({users}: CappedTableProps) => {
+export const DropGt10Table = ({users}: DropGt10TableProps) => {
   const adjustedUsers = users
     .map((user) => ({
       ...user,
-      gifts: user.gifts.map((gift) => ({
-        ...gift,
-        tokens: gift.tokens > 10 ? 10 : gift.tokens,
-      })),
+      gifts: user.gifts.filter((gift) => gift.tokens <= 10),
     }))
     .sort((a, b) => giveReceived(b) - giveReceived(a))
 
