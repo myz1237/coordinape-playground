@@ -1,12 +1,23 @@
 import {Table, Tbody, Td, Tfoot, Th, Thead, Tr} from '@chakra-ui/react'
-import {CircleSnapshot, User} from '../types'
+import {CircleSnapshot} from '../types'
 import {giveReceived} from '../utils'
 
-export interface UnadjustedTableProps extends CircleSnapshot {}
+export type CappedTableProps = Pick<CircleSnapshot, 'users'>
 
-export const UnadjustedTable = ({users, totalGive}: UnadjustedTableProps) => {
-  const sortedUsers = [...users].sort(
-    (a, b) => giveReceived(b) - giveReceived(a),
+export const CappedTable = ({users}: CappedTableProps) => {
+  const adjustedUsers = users
+    .map((user) => ({
+      ...user,
+      gifts: user.gifts.map((gift) => ({
+        ...gift,
+        tokens: gift.tokens > 10 ? 10 : gift.tokens,
+      })),
+    }))
+    .sort((a, b) => giveReceived(b) - giveReceived(a))
+
+  const totalGive = adjustedUsers.reduce(
+    (total, user) => total + giveReceived(user),
+    0,
   )
 
   return (
@@ -18,7 +29,7 @@ export const UnadjustedTable = ({users, totalGive}: UnadjustedTableProps) => {
         </Tr>
       </Thead>
       <Tbody>
-        {sortedUsers.map((user) => {
+        {adjustedUsers.map((user) => {
           const giveReceived = user.gifts.reduce(
             (acc, gift) => acc + gift.tokens,
             0,
