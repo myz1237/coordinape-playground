@@ -1,6 +1,11 @@
 import {Table, Tbody, Td, Tfoot, Th, Thead, Tr} from '@chakra-ui/react'
 import {CircleSnapshot} from '../types'
-import {decimalToPercent, giveReceived} from '../utils'
+import {
+  codeReceivedFromGive,
+  decimalToPercent,
+  giveReceived,
+  numberFormatter,
+} from '../utils'
 
 export interface UnadjustedTableProps extends CircleSnapshot {}
 
@@ -16,6 +21,7 @@ export const UnadjustedTable = ({users, totalGive}: UnadjustedTableProps) => {
           <Th>Name</Th>
           <Th isNumeric>GIVE Received</Th>
           <Th isNumeric>% of GIVE</Th>
+          <Th isNumeric>CODE Distribution</Th>
         </Tr>
       </Thead>
       <Tbody>
@@ -25,21 +31,24 @@ export const UnadjustedTable = ({users, totalGive}: UnadjustedTableProps) => {
             0,
           )
           const percentGive = decimalToPercent(giveReceived / totalGive)
+          const codeReceived = codeReceivedFromGive(giveReceived, totalGive)
 
           return (
             <Tr key={user.address}>
               <Td>{user.name}</Td>
-              <Td isNumeric>{giveReceived}</Td>
+              <Td isNumeric>{numberFormatter.format(giveReceived)}</Td>
               <Td isNumeric>{percentGive}</Td>
+              <Td isNumeric>{numberFormatter.format(codeReceived)}</Td>
             </Tr>
           )
         })}
       </Tbody>
       <Tfoot>
         <Tr>
-          <Td>Total</Td>
+          <Td>Totals</Td>
+          <Td isNumeric>{numberFormatter.format(totalGive)}</Td>
           <Td />
-          <Td isNumeric>{totalGive}</Td>
+          <Td isNumeric>{numberFormatter.format(1000000)}</Td>
         </Tr>
       </Tfoot>
     </Table>
