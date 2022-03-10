@@ -1,4 +1,5 @@
 export interface Gift {
+  recipientAddress: string
   senderAddress: string
   tokens: number
 }
@@ -6,10 +7,14 @@ export interface Gift {
 export interface User {
   address: string
   name: string
-  gifts: Gift[]
+  gifts: {
+    received: Gift[]
+    sent: Gift[]
+  }
 }
 
 export interface CircleSnapshot {
+  gifts: Gift[]
   users: User[]
   totalGive: number
 }

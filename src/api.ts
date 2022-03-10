@@ -1,4 +1,4 @@
-import {CircleSnapshot} from './types'
+import {CircleSnapshot, Gift, User} from './types'
 import axios from 'axios'
 
 const instance = axios.create({
@@ -48,15 +48,21 @@ export const fetchCircleSnapshot = async (): Promise<CircleSnapshot> => {
     fetchGifts(),
   ])
 
-  const users = usersResponse.map(({address, name}) => ({
+  const gifts: Gift[] = giftsResponse.map(
+    ({recipient_address, sender_address, tokens}) => ({
+      recipientAddress: recipient_address,
+      senderAddress: sender_address,
+      tokens,
+    }),
+  )
+
+  const users: User[] = usersResponse.map(({address, name}) => ({
     address,
     name,
-    gifts: giftsResponse
-      .filter((gift) => gift.recipient_address === address)
-      .map((gift) => ({
-        senderAddress: gift.sender_address,
-        tokens: gift.tokens,
-      })),
+    gifts: {
+      received: gifts.filter((gift) => gift.recipientAddress === address),
+      sent: gifts.filter((gift) => gift.senderAddress === address),
+    },
   }))
 
   const totalGive = giftsResponse.reduce(
@@ -65,6 +71,7 @@ export const fetchCircleSnapshot = async (): Promise<CircleSnapshot> => {
   )
 
   return {
+    gifts,
     users,
     totalGive,
   }

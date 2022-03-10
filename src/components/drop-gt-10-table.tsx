@@ -1,5 +1,5 @@
 import {Table, Tbody, Td, Tfoot, Th, Thead, Tr} from '@chakra-ui/react'
-import {CircleSnapshot} from '../types'
+import {CircleSnapshot, User} from '../types'
 import {
   codeReceivedFromGive,
   decimalToPercent,
@@ -9,12 +9,17 @@ import {
 
 export type DropGt10TableProps = Pick<CircleSnapshot, 'users'>
 
+const dropApplicableUserReceivedGifts = (user: User) => ({
+  ...user,
+  gifts: {
+    ...user.gifts,
+    received: user.gifts.received.filter((gift) => gift.tokens <= 10),
+  },
+})
+
 export const DropGt10Table = ({users}: DropGt10TableProps) => {
   const adjustedUsers = users
-    .map((user) => ({
-      ...user,
-      gifts: user.gifts.filter((gift) => gift.tokens <= 10),
-    }))
+    .map(dropApplicableUserReceivedGifts)
     .sort((a, b) => giveReceived(b) - giveReceived(a))
 
   const totalGive = adjustedUsers.reduce(
@@ -34,7 +39,7 @@ export const DropGt10Table = ({users}: DropGt10TableProps) => {
       </Thead>
       <Tbody>
         {adjustedUsers.map((user) => {
-          const giveReceived = user.gifts.reduce(
+          const giveReceived = user.gifts.received.reduce(
             (acc, gift) => acc + gift.tokens,
             0,
           )

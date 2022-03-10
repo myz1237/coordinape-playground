@@ -7,7 +7,7 @@ import {
   numberFormatter,
 } from '../utils'
 
-export interface UnadjustedTableProps extends CircleSnapshot {}
+export type UnadjustedTableProps = Pick<CircleSnapshot, 'users' | 'totalGive'>
 
 export const UnadjustedTable = ({users, totalGive}: UnadjustedTableProps) => {
   const sortedUsers = [...users].sort(
@@ -26,7 +26,7 @@ export const UnadjustedTable = ({users, totalGive}: UnadjustedTableProps) => {
       </Thead>
       <Tbody>
         {sortedUsers.map((user) => {
-          const giveReceived = user.gifts.reduce(
+          const giveReceived = user.gifts.received.reduce(
             (acc, gift) => acc + gift.tokens,
             0,
           )
