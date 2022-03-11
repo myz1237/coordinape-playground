@@ -1,4 +1,5 @@
 export interface Gift {
+  id: number
   recipientAddress: string
   senderAddress: string
   tokens: number

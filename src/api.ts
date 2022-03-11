@@ -23,6 +23,7 @@ type UsersResponse = {
 }[]
 
 type GiftsResponse = {
+  id: number
   recipient_address: string
   sender_address: string
   tokens: number
@@ -49,7 +50,8 @@ export const fetchCircleSnapshot = async (): Promise<CircleSnapshot> => {
   ])
 
   const gifts: Gift[] = giftsResponse.map(
-    ({recipient_address, sender_address, tokens}) => ({
+    ({id, recipient_address, sender_address, tokens}) => ({
+      id,
       recipientAddress: recipient_address,
       senderAddress: sender_address,
       tokens,
