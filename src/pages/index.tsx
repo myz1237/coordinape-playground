@@ -1,4 +1,5 @@
 import {Heading} from '@chakra-ui/react'
+import axios from 'axios'
 import type {NextPage} from 'next'
 import Head from 'next/head'
 import {useQuery} from 'react-query'
@@ -6,13 +7,8 @@ import {Data} from '../components/data'
 
 const useCircleSnapshot = () =>
   useQuery('circleSnapshot', async () => {
-    const response = await fetch('/api/snapshot')
-
-    if (response.status >= 400) {
-      throw new Error(await response.json())
-    }
-
-    return await response.json()
+    const response = await axios.get('/api/snapshot')
+    return response.data
   })
 
 const Home: NextPage = () => {
