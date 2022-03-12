@@ -3,7 +3,7 @@ import axios from 'axios'
 import type {NextPage} from 'next'
 import Head from 'next/head'
 import {useQuery} from 'react-query'
-import {Data} from '../components/data'
+import {Tables} from '../components/tables'
 
 const useCircleSnapshot = () =>
   useQuery('circleSnapshot', async () => {
@@ -28,7 +28,7 @@ const Home: NextPage = () => {
         <div>
           {isLoading && <p>Loading...</p>}
           {error && <p>Error: {(error as any).message}</p>}
-          {data && <Data {...data} />}
+          {data && <Tables {...data} />}
         </div>
       </main>
     </div>

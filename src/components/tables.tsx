@@ -8,7 +8,7 @@ import {UnadjustedTable} from './unadjusted-table'
 
 export interface DataProps extends CircleSnapshot {}
 
-export const Data = ({gifts, users, totalGive}: DataProps) => {
+export const Tables = ({gifts, users, totalGive}: DataProps) => {
   return (
     <Tabs>
       <TabList>
