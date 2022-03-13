@@ -5,17 +5,19 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  if (!process.env.COORDINAPE_AUTH_TOKEN) {
-    return res.status(500).json({
-      message: 'Missing COORDINAPE_AUTH_TOKEN',
+  const token = req.query.token as string
+
+  if (!token) {
+    return res.status(401).json({
+      message: 'Missing token',
     })
   }
 
   try {
-    const snapshot = await fetchCircleSnapshot()
+    const snapshot = await fetchCircleSnapshot(token)
     return res.status(200).json(snapshot)
   } catch (error) {
     console.error(error)
-    return res.status(500).json(error)
+    return res.status((error as any)?.response?.status ?? 500).json(error)
   }
 }

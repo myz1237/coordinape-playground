@@ -1,11 +1,8 @@
-import {CircleSnapshot, Gift, User} from './types'
 import axios from 'axios'
+import {CircleSnapshot, Gift, User} from './types'
 
 const instance = axios.create({
-  headers: {
-    Authorization: process.env.COORDINAPE_AUTH_TOKEN!,
-    'Content-Type': 'application/json',
-  },
+  headers: {'Content-Type': 'application/json'},
 })
 
 interface ManifestResponse {
@@ -29,24 +26,28 @@ type GiftsResponse = {
   tokens: number
 }[]
 
-const fetchGifts = async (): Promise<GiftsResponse> => {
+const fetchGifts = async (token: string): Promise<GiftsResponse> => {
   const response = await instance.get<GiftsResponse>(
     'https://api.coordinape.com/api/v2/pending-token-gifts?circle_id=1573&epoch_id=2538',
+    {headers: {Authorization: token}},
   )
   return response.data
 }
 
-const fetchManifestUsers = async (): Promise<UsersResponse> => {
+const fetchManifestUsers = async (token: string): Promise<UsersResponse> => {
   const response = await instance.get<ManifestResponse>(
     'https://api.coordinape.com/api/v2/manifest?circle_id=1573',
+    {headers: {Authorization: token}},
   )
   return response.data.circle.users.map(({address, name}) => ({address, name}))
 }
 
-export const fetchCircleSnapshot = async (): Promise<CircleSnapshot> => {
+export const fetchCircleSnapshot = async (
+  token: string,
+): Promise<CircleSnapshot> => {
   const [usersResponse, giftsResponse] = await Promise.all([
-    fetchManifestUsers(),
-    fetchGifts(),
+    fetchManifestUsers(token),
+    fetchGifts(token),
   ])
 
   const gifts: Gift[] = giftsResponse.map(

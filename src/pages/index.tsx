@@ -1,19 +1,10 @@
-import {Heading} from '@chakra-ui/react'
-import axios from 'axios'
+import {Box, Heading} from '@chakra-ui/react'
 import type {NextPage} from 'next'
 import Head from 'next/head'
-import {useQuery} from 'react-query'
-import {Tables} from '../components/tables'
-
-const useCircleSnapshot = () =>
-  useQuery('circleSnapshot', async () => {
-    const response = await axios.get('/api/snapshot')
-    return response.data
-  })
+import {Authenticate} from '../auth/context'
+import {Data} from '../components/data'
 
 const Home: NextPage = () => {
-  const {isLoading, error, data} = useCircleSnapshot()
-
   return (
     <div>
       <Head>
@@ -22,15 +13,15 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
+      <header>
         <Heading as="h1">Coordinape Playground</Heading>
+      </header>
 
-        <div>
-          {isLoading && <p>Loading...</p>}
-          {error && <p>Error: {(error as any).message}</p>}
-          {data && <Tables {...data} />}
-        </div>
-      </main>
+      <Box as="main" p={3}>
+        <Authenticate>
+          <Data />
+        </Authenticate>
+      </Box>
     </div>
   )
 }
