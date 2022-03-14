@@ -17,7 +17,7 @@ const Home: NextPage = () => {
       </Head>
 
       <header>
-        <Heading as="h1">Coordinape Playground</Heading>
+        <Heading as="h1">D_D Coordinape Playground</Heading>
       </header>
 
       <Box as="main" p={3}>
