@@ -1,6 +1,7 @@
-import {Table, Tbody, Td, Th, Thead, Tr} from '@chakra-ui/react'
+import {Stack, Table, Tbody, Td, Th, Thead, Tr} from '@chakra-ui/react'
 import {CircleSnapshot, Gift, User} from '../types'
 import {numberFormatter} from '../utils'
+import {TableDescription} from './components'
 
 export type TransactionsTableProps = Pick<CircleSnapshot, 'gifts' | 'users'>
 
@@ -34,23 +35,28 @@ export const TransactionsTable = ({gifts, users}: TransactionsTableProps) => {
   )
 
   return (
-    <Table>
-      <Thead>
-        <Tr>
-          <Th>Sender</Th>
-          <Th isNumeric>GIVE</Th>
-          <Th>Receiver</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {pairs.map(({recipient, sender, tokens}) => (
-          <Tr key={`${recipient.address}->${sender.address}`}>
-            <Td>{sender.name}</Td>
-            <Td isNumeric>{numberFormatter.format(tokens)}</Td>
-            <Td>{recipient.name}</Td>
+    <Stack>
+      <TableDescription>
+        A list of all transactions in the circle.
+      </TableDescription>
+      <Table>
+        <Thead>
+          <Tr>
+            <Th>Sender</Th>
+            <Th isNumeric>GIVE</Th>
+            <Th>Receiver</Th>
           </Tr>
-        ))}
-      </Tbody>
-    </Table>
+        </Thead>
+        <Tbody>
+          {pairs.map(({recipient, sender, tokens}) => (
+            <Tr key={`${recipient.address}->${sender.address}`}>
+              <Td>{sender.name}</Td>
+              <Td isNumeric>{numberFormatter.format(tokens)}</Td>
+              <Td>{recipient.name}</Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    </Stack>
   )
 }

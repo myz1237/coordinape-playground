@@ -1,6 +1,7 @@
-import {Table, Tbody, Td, Th, Thead, Tr} from '@chakra-ui/react'
+import {Stack, Table, Tbody, Td, Th, Thead, Tr} from '@chakra-ui/react'
 import {CircleSnapshot, Gift, User} from '../types'
 import {numberFormatter} from '../utils'
+import {TableDescription} from './components'
 
 export type PairsTableProps = Pick<CircleSnapshot, 'gifts' | 'users'>
 
@@ -62,27 +63,33 @@ export const PairsTable = ({gifts, users}: PairsTableProps) => {
   )
 
   return (
-    <Table>
-      <Thead>
-        <Tr>
-          <Th>User 1</Th>
-          <Th isNumeric>User 1 GIVE Sent</Th>
-          <Th isNumeric>Total</Th>
-          <Th isNumeric>User 2 GIVE Sent</Th>
-          <Th>User 2</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {pairs.map(({user1, user2, totalGiveExchanged}) => (
-          <Tr key={`${user1.user.address}->${user2.user.address}`}>
-            <Td>{user1.user.name}</Td>
-            <Td isNumeric>{numberFormatter.format(user1.tokensSent)}</Td>
-            <Td isNumeric>{numberFormatter.format(totalGiveExchanged)}</Td>
-            <Td isNumeric>{numberFormatter.format(user2.tokensSent)}</Td>
-            <Td>{user2.user.name}</Td>
+    <Stack>
+      <TableDescription>
+        A list of all paired transactions in the circle, where a pair is any two
+        users that send each other GIVE.
+      </TableDescription>
+      <Table>
+        <Thead>
+          <Tr>
+            <Th>User 1</Th>
+            <Th isNumeric>User 1 GIVE Sent</Th>
+            <Th isNumeric>Total</Th>
+            <Th isNumeric>User 2 GIVE Sent</Th>
+            <Th>User 2</Th>
           </Tr>
-        ))}
-      </Tbody>
-    </Table>
+        </Thead>
+        <Tbody>
+          {pairs.map(({user1, user2, totalGiveExchanged}) => (
+            <Tr key={`${user1.user.address}->${user2.user.address}`}>
+              <Td>{user1.user.name}</Td>
+              <Td isNumeric>{numberFormatter.format(user1.tokensSent)}</Td>
+              <Td isNumeric>{numberFormatter.format(totalGiveExchanged)}</Td>
+              <Td isNumeric>{numberFormatter.format(user2.tokensSent)}</Td>
+              <Td>{user2.user.name}</Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    </Stack>
   )
 }
