@@ -10,7 +10,7 @@ export interface DataProps extends CircleSnapshot {}
 
 export const Tables = ({gifts, users, totalGive}: DataProps) => {
   return (
-    <Tabs>
+    <Tabs isLazy>
       <TabList>
         <Tab>Unadjusted</Tab>
         <Tab>&gt;10 -&gt; 10</Tab>
