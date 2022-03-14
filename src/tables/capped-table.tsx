@@ -1,6 +1,7 @@
 import {
   Stack,
   Table,
+  TableCaption,
   Tbody,
   Td,
   Text,
@@ -40,6 +41,7 @@ export const CappedTable = ({users}: CappedTableProps) => {
     (total, user) => total + giveReceived(user),
     0,
   )
+  const codePerGive = codeReceivedFromGive(1, totalGive)
 
   return (
     <Stack>
@@ -57,6 +59,7 @@ export const CappedTable = ({users}: CappedTableProps) => {
         </Stack>
       </TableDescription>
       <Table>
+        <TableCaption>CODE per GIVE = {codePerGive}</TableCaption>
         <Thead>
           <Tr>
             <Th>Name</Th>

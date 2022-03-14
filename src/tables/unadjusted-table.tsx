@@ -1,4 +1,14 @@
-import {Stack, Table, Tbody, Td, Tfoot, Th, Thead, Tr} from '@chakra-ui/react'
+import {
+  Stack,
+  Table,
+  TableCaption,
+  Tbody,
+  Td,
+  Tfoot,
+  Th,
+  Thead,
+  Tr,
+} from '@chakra-ui/react'
 import {CircleSnapshot} from '../types'
 import {
   codeReceivedFromGive,
@@ -14,6 +24,7 @@ export const UnadjustedTable = ({users, totalGive}: UnadjustedTableProps) => {
   const sortedUsers = [...users].sort(
     (a, b) => giveReceived(b) - giveReceived(a),
   )
+  const codePerGive = codeReceivedFromGive(1, totalGive)
 
   return (
     <Stack>
@@ -21,6 +32,7 @@ export const UnadjustedTable = ({users, totalGive}: UnadjustedTableProps) => {
         Raw, unadjusted allocations from our Coordinape circle
       </TableDescription>
       <Table>
+        <TableCaption>CODE per GIVE = {codePerGive}</TableCaption>
         <Thead>
           <Tr>
             <Th>Name</Th>

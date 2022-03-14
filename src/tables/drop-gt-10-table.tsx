@@ -1,6 +1,7 @@
 import {
   Stack,
   Table,
+  TableCaption,
   Tbody,
   Td,
   Text,
@@ -37,6 +38,7 @@ export const DropGt10Table = ({users}: DropGt10TableProps) => {
     (total, user) => total + giveReceived(user),
     0,
   )
+  const codePerGive = codeReceivedFromGive(1, totalGive)
 
   return (
     <Stack>
@@ -54,6 +56,7 @@ export const DropGt10Table = ({users}: DropGt10TableProps) => {
         </Stack>
       </TableDescription>
       <Table>
+        <TableCaption>CODE per GIVE = {codePerGive}</TableCaption>
         <Thead>
           <Tr>
             <Th>Name</Th>
