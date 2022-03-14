@@ -20,3 +20,5 @@ export const codeReceivedFromGive = (give: number, totalGive: number) => {
 
 export const isGiftFromUser = (gift: Gift, user: User) =>
   gift.senderAddress === user.address
+
+export const userReceivedGive = (user: User) => giveReceived(user) > 0

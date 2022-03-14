@@ -16,10 +16,15 @@ import {
   decimalToPercent,
   giveReceived,
   numberFormatter,
+  userReceivedGive,
 } from '../utils'
 import {TableDescription} from './components'
 
 export type DropGt10TableProps = Pick<CircleSnapshot, 'users'>
+
+interface CappedUser extends User {
+  giveRemovedByCap: number
+}
 
 const dropApplicableUserReceivedGifts = (user: User) => ({
   ...user,
@@ -29,9 +34,22 @@ const dropApplicableUserReceivedGifts = (user: User) => ({
   },
 })
 
+const adjustUser = (user: User): CappedUser => {
+  const unadjustedGiveTotal = giveReceived(user)
+  const adjustedUser = dropApplicableUserReceivedGifts(user)
+  const adjustedGiveTotal = giveReceived(adjustedUser)
+  const giveRemovedByCap = unadjustedGiveTotal - adjustedGiveTotal
+
+  return {
+    ...adjustedUser,
+    giveRemovedByCap,
+  }
+}
+
 export const DropGt10Table = ({users}: DropGt10TableProps) => {
   const adjustedUsers = users
-    .map(dropApplicableUserReceivedGifts)
+    .filter(userReceivedGive)
+    .map(adjustUser)
     .sort((a, b) => giveReceived(b) - giveReceived(a))
 
   const totalGive = adjustedUsers.reduce(
@@ -61,6 +79,7 @@ export const DropGt10Table = ({users}: DropGt10TableProps) => {
           <Tr>
             <Th>Name</Th>
             <Th isNumeric>GIVE Received</Th>
+            <Th isNumeric>GIVE Removed by Cap</Th>
             <Th isNumeric>% of GIVE</Th>
             <Th isNumeric>CODE Distribution</Th>
           </Tr>
@@ -78,6 +97,9 @@ export const DropGt10Table = ({users}: DropGt10TableProps) => {
               <Tr key={user.address}>
                 <Td>{user.name}</Td>
                 <Td isNumeric>{numberFormatter.format(giveReceived)}</Td>
+                <Td isNumeric>
+                  -{numberFormatter.format(user.giveRemovedByCap)}
+                </Td>
                 <Td isNumeric>{percentGive}</Td>
                 <Td isNumeric>{numberFormatter.format(codeReceived)}</Td>
               </Tr>

@@ -15,15 +15,16 @@ import {
   decimalToPercent,
   giveReceived,
   numberFormatter,
+  userReceivedGive,
 } from '../utils'
 import {TableDescription} from './components'
 
 export type UnadjustedTableProps = Pick<CircleSnapshot, 'users' | 'totalGive'>
 
 export const UnadjustedTable = ({users, totalGive}: UnadjustedTableProps) => {
-  const sortedUsers = [...users].sort(
-    (a, b) => giveReceived(b) - giveReceived(a),
-  )
+  const sortedUsers = [...users]
+    .filter(userReceivedGive)
+    .sort((a, b) => giveReceived(b) - giveReceived(a))
   const codePerGive = codeReceivedFromGive(1, totalGive)
 
   return (

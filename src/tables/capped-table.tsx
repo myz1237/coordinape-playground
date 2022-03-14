@@ -16,10 +16,15 @@ import {
   decimalToPercent,
   giveReceived,
   numberFormatter,
+  userReceivedGive,
 } from '../utils'
 import {TableDescription} from './components'
 
 export type CappedTableProps = Pick<CircleSnapshot, 'users'>
+
+interface CappedUser extends User {
+  giveRemovedByCap: number
+}
 
 const capUserReceivedGive = (user: User) => ({
   ...user,
@@ -32,9 +37,22 @@ const capUserReceivedGive = (user: User) => ({
   },
 })
 
+const adjustUser = (user: User): CappedUser => {
+  const unadjustedGiveTotal = giveReceived(user)
+  const adjustedUser = capUserReceivedGive(user)
+  const adjustedGiveTotal = giveReceived(adjustedUser)
+  const giveRemovedByCap = unadjustedGiveTotal - adjustedGiveTotal
+
+  return {
+    ...adjustedUser,
+    giveRemovedByCap,
+  }
+}
+
 export const CappedTable = ({users}: CappedTableProps) => {
   const adjustedUsers = users
-    .map(capUserReceivedGive)
+    .filter(userReceivedGive)
+    .map(adjustUser)
     .sort((a, b) => giveReceived(b) - giveReceived(a))
 
   const totalGive = adjustedUsers.reduce(
@@ -64,6 +82,7 @@ export const CappedTable = ({users}: CappedTableProps) => {
           <Tr>
             <Th>Name</Th>
             <Th isNumeric>GIVE Received</Th>
+            <Th isNumeric>GIVE Removed by Cap</Th>
             <Th isNumeric>% of GIVE</Th>
             <Th isNumeric>CODE Distribution</Th>
           </Tr>
@@ -81,6 +100,9 @@ export const CappedTable = ({users}: CappedTableProps) => {
               <Tr key={user.address}>
                 <Td>{user.name}</Td>
                 <Td isNumeric>{numberFormatter.format(giveReceived)}</Td>
+                <Td isNumeric>
+                  -{numberFormatter.format(user.giveRemovedByCap)}
+                </Td>
                 <Td isNumeric>{percentGive}</Td>
                 <Td isNumeric>{numberFormatter.format(codeReceived)}</Td>
               </Tr>
