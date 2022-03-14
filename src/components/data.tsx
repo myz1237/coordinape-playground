@@ -2,7 +2,7 @@ import axios from 'axios'
 import {useEffect} from 'react'
 import {useQuery} from 'react-query'
 import {useAuthContext} from '../auth/context'
-import {Tables} from '../components/tables'
+import {Tables} from '../tables/tables'
 
 const useCircleSnapshot = () => {
   const {token, clear} = useAuthContext()
